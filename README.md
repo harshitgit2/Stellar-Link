@@ -1,73 +1,72 @@
-# React + TypeScript + Vite
+# Stellar Link | Testnet Wallet dApp
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Stellar Link is a premium, dark-mode-first decentralized wallet client for the Stellar Testnet. It connects with the Freighter browser wallet extension to check balances, request faucet funding, execute payments, and monitor watchlists.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Wallet Connection**: Securely connect and disconnect using the browser-injected **Freighter wallet extension**.
+- **Dashboard Overview**: Check account status (active/inactive) and see your native Stellar Lumens (XLM) balance with real-time updates.
+- **Testnet Faucet**: Request 10,000 testnet XLM from Friendbot with a single click.
+- **Simple Payment dApp**: Send XLM to any Stellar address on the testnet. Includes live validations (recipient format, sufficient balances, and text memo byte-limits) and interactive step-by-step transaction state visualization (building -> signing -> submitting -> success/error).
+- **Balance Checker**: Track and monitor balances for multiple custom Stellar accounts concurrently. Watched addresses are persisted in browser `localStorage`.
+- **Transaction History**: Display a timeline of the 15 most recent payment-related operations (payments sent, payments received, account creations, and account merges) complete with directional indicators and direct explorer links.
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Technical Stack
 
-## Expanding the ESLint configuration
+- **Core Framework**: React (TypeScript) + Vite
+- **Blockchain SDK**: `@stellar/stellar-sdk` (utilizing the Horizon REST API client)
+- **Wallet Integration**: `@stellar/freighter-api`
+- **Iconography**: `lucide-react`
+- **Styling**: Modern, responsive vanilla CSS featuring glassmorphic designs, micro-animations, custom scrollbars, and toast status banners.
+- **Polyfills**: `vite-plugin-node-polyfills` (handles cryptography buffer requirements of the Stellar SDK).
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Prerequisites
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+To interact with the Stellar blockchain, you must have the **Freighter Wallet Extension** installed in your browser.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+1. Install Freighter from the official website: [freighter.app](https://www.freighter.app/)
+2. Open the extension and configure it to use the **Testnet**:
+   - Go to *Settings (gear icon)* > *Networks*
+   - Select **Testnet** (Default is usually Public/Mainnet)
+
+---
+
+## Getting Started
+
+### 1. Clone & Install Dependencies
+Navigate to the project directory and run:
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 2. Run the Development Server
+Start the local Vite server:
+```bash
+npm run dev
 ```
+Open **[http://localhost:5173](http://localhost:5173)** in your browser.
+
+### 3. Build for Production
+Bundle the application for production:
+```bash
+npm run build
+```
+Vite will output the static bundle assets under the `dist/` directory.
+
+---
+
+## Code Structure
+
+- **Vite Config**: [`vite.config.ts`](./vite.config.ts) contains configuration for injecting Node polyfills.
+- **CSS Styles**: [`src/index.css`](./src/index.css) defines the theme colors, cards, loaders, and transitions.
+- **Stellar Service**: [`src/services/stellar.ts`](./src/services/stellar.ts) handles Horizon calls, transaction building, and Freighter signing integrations.
+- **UI Components**:
+  - `Header`: Displays wallet status, active network badges, and address copy widgets.
+  - `Dashboard`: Shows native balance stats, inactive warnings, and faucet triggers.
+  - `PaymentForm`: Manages payment inputs, transaction states, and transaction explorer hashes.
+  - `BalanceChecker`: Watches multiple accounts simultaneously.
+  - `TransactionHistory`: Maps operations to incoming/outgoing feeds.
