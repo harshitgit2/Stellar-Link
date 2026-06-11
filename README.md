@@ -13,6 +13,8 @@ Stellar Link is a premium, dark-mode-first decentralized wallet client for the S
 - **Balance Checker**: Track and monitor balances for multiple custom Stellar accounts concurrently. Watched addresses are persisted in browser `localStorage`.
 - **Transaction History**: Display a timeline of the 15 most recent payment-related operations (payments sent, payments received, account creations, and account merges) complete with directional indicators and direct explorer links.
 
+
+
 ---
 
 ## Technical Stack
