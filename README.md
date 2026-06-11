@@ -2,6 +2,8 @@
 
 Stellar Link is a premium, dark-mode-first decentralized wallet client for the Stellar Testnet. It connects with the Freighter browser wallet extension to check balances, request faucet funding, execute payments, and monitor watchlists.
 
+<img src="https://raw.githubusercontent.com/harshitgit2/Stellar-Link/refs/heads/main/public/wallet.png" width="1008" height="900" alt="Dashboard Screenshot">
+
 ## Features
 
 - **Wallet Connection**: Securely connect and disconnect using the browser-injected **Freighter wallet extension**.
