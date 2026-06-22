@@ -314,4 +314,51 @@ export const stellarService = {
       throw new Error(err?.message || "Batch transaction failed or was rejected.");
     }
   },
+
+  /**
+   * Fetch recent incoming payments for an account.
+   * Helps determine where the funds in the wallet originated.
+   */
+  async fetchIncomingPayments(
+    address: string
+  ): Promise<{ from: string; amount: string; hash: string; date: string }[]> {
+    try {
+      const response = await server.payments().forAccount(address).order("desc").limit(30).call();
+      const records = response.records || [];
+
+      // Filter and map incoming payment operations
+      const incoming = records
+        .filter((record: any) => {
+          // Check if it's an incoming payment or account creation where address is beneficiary
+          if (record.type === "payment" && record.to === address) return true;
+          if (record.type === "create_account" && record.account === address) return true;
+          return false;
+        })
+        .map((record: any) => {
+          let from = "";
+          let amount = "0";
+          if (record.type === "payment") {
+            from = record.from;
+            amount = record.amount;
+          } else if (record.type === "create_account") {
+            from = record.funder;
+            amount = record.starting_balance;
+          }
+
+          return {
+            from,
+            amount,
+            hash: record.transaction_hash,
+            date: record.created_at,
+          };
+        });
+
+      // return the 5 most recent incoming transfers
+      return incoming.slice(0, 5);
+    } catch (err: any) {
+      console.error("Error fetching incoming payments:", err);
+      // If 404 (new/unfunded account), return empty array
+      return [];
+    }
+  },
 };
