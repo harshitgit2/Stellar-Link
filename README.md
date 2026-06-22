@@ -1,111 +1,79 @@
-# Stellar Link | Testnet Wallet dApp
+# Stellar Wallet — Testnet dApp
 
-Stellar Link is a premium, dark-mode-first decentralized wallet client for the Stellar Testnet. It connects with the Freighter browser wallet extension to check balances, request faucet funding, execute payments, and monitor watchlists.
+<img src ="https://raw.githubusercontent.com/harshitgit2/Stellar-Link/refs/heads/main/public/pay-track.png" height="700" width="900">
 
-<img src="https://raw.githubusercontent.com/harshitgit2/Stellar-Link/refs/heads/main/public/wallet.png" width="1008" height="900" alt="Dashboard Screenshot">
+<img src ="https://raw.githubusercontent.com/harshitgit2/Stellar-Link/refs/heads/main/public/wallet-balance.png" height="700" width="900">
 
-## Features
+<img src ="https://raw.githubusercontent.com/harshitgit2/Stellar-Link/refs/heads/main/public/pay-track-map.png" height="700" width="900">
 
-- **Wallet Connection**: Securely connect and disconnect using the browser-injected **Freighter wallet extension**.
-- **Dashboard Overview**: Check account status (active/inactive) and see your native Stellar Lumens (XLM) balance with real-time updates.
-- **Testnet Faucet**: Request 10,000 testnet XLM from Friendbot with a single click.
-- **Simple Payment dApp**: Send XLM to any Stellar address on the testnet. Includes live validations and transaction state visualizations.
-- **Payment Tracker (Multi-Address Payments)**: Distribute XLM to multiple addresses concurrently in a single atomic transaction. Monitor the live validation, signing, and submission status of each recipient in real-time.
-- **Balance Checker**: Track and monitor balances for multiple custom Stellar accounts concurrently. Watched addresses are persisted in browser `localStorage`.
-- **Transaction History**: Display a timeline of the 15 most recent payment-related operations with directional indicators and direct explorer links.
+## Tech Stack
 
----
+- Frontend: React (TypeScript) + Vite
+- Blockchain: Stellar SDK (`@stellar/stellar-sdk`) + Freighter
+- Smart Contract: Soroban (Rust) — located at `contracts/payment_tracker`
 
-## Soroban Smart Contract
+## Quick Start
 
-Stellar Link includes a custom **Soroban smart contract** located under the [`contracts/payment_tracker`](./contracts/payment_tracker) directory. This contract allows logging of payment events directly on the Stellar ledger for verifiability and decentralized history indexing.
+Prerequisites:
+- Node.js (16+ recommended)
+- npm or yarn
+- Rust & Cargo (for building/testing the Soroban contract)
+- Freighter browser extension (set to Testnet)
 
-### Contract Features
-- **Payment Recording**: Securely logs payment items containing the sender address, recipient address, amount, memo text, and block timestamp.
-- **Persistent History Pruning**: Stores historical payment logs in contract state, automatically pruning to retain the 20 most recent records to prevent state bloat.
-- **Ledger Event Emission**: Publishes structured `payment` events on-chain to support event indexers (e.g. Mercury, Horizon event streams).
-- **Authentication Check**: Enforces sender signatures using `sender.require_auth()`.
+Install and run the frontend:
 
-### Building & Testing the Contract
-
-To run tests and compile the contract:
-1. Make sure Rust and Cargo are installed with the WASM compilation target:
-   ```bash
-   rustup target add wasm32-unknown-unknown
-   ```
-2. Run the cargo test suite:
-   ```bash
-   cargo test --package payment-tracker
-   ```
-3. Compile the production WASM smart contract binary:
-   ```bash
-   cargo build --target wasm32-unknown-unknown --release
-   ```
-
-### Deployed Contract Information
-
-- **Network**: Stellar Testnet
-- **Deployed Contract ID**: `CCAB45GTYPX6X37JLW4RYX2BQD6WNB7TFLC2PJV5O3WTYWYZT4Q7TRACK`
-- **Horizon Explorer Link**: [View Contract on Stellar Expert](https://stellar.expert/explorer/testnet/contract/CCAB45GTYPX6X37JLW4RYX2BQD6WNB7TFLC2PJV5O3WTYWYZT4Q7TRACK)
-
----
-
-## Technical Stack
-
-- **Core Framework**: React (TypeScript) + Vite
-- **Blockchain SDK**: `@stellar/stellar-sdk` (utilizing the Horizon REST API client)
-- **Wallet Integration**: `@stellar/freighter-api`
-- **Iconography**: `lucide-react`
-- **Styling**: Modern, responsive vanilla CSS featuring glassmorphic designs, micro-animations, custom scrollbars, and toast status banners.
-- **Polyfills**: `vite-plugin-node-polyfills` (handles cryptography buffer requirements of the Stellar SDK).
-
----
-
-## Prerequisites
-
-To interact with the Stellar blockchain, you must have the **Freighter Wallet Extension** installed in your browser.
-
-1. Install Freighter from the official website: [freighter.app](https://www.freighter.app/)
-2. Open the extension and configure it to use the **Testnet**:
-   - Go to *Settings (gear icon)* > *Networks*
-   - Select **Testnet** (Default is usually Public/Mainnet)
-
----
-
-## Getting Started
-
-### 1. Clone & Install Dependencies
-Navigate to the project directory and run:
 ```bash
 npm install
-```
-
-### 2. Run the Development Server
-Start the local Vite server:
-```bash
 npm run dev
 ```
-Open **[http://localhost:5173](http://localhost:5173)** in your browser.
 
-### 3. Build for Production
-Bundle the application for production:
+Open http://localhost:5173 in your browser.
+
+Build for production:
+
 ```bash
 npm run build
 ```
-Vite will output the static bundle assets under the `dist/` directory.
 
----
+## Environment
 
-## Code Structure
+Create a `.env` or set environment variables for the frontend where applicable (example variables used by the app):
 
-- **Vite Config**: [`vite.config.ts`](./vite.config.ts) contains configuration for injecting Node polyfills.
-- **Smart Contract**: [`contracts/payment_tracker/src/lib.rs`](./contracts/payment_tracker/src/lib.rs) houses the Soroban smart contract source code.
-- **CSS Styles**: [`src/index.css`](./src/index.css) defines the theme colors, cards, loaders, and transitions.
-- **Stellar Service**: [`src/services/stellar.ts`](./src/services/stellar.ts) handles Horizon calls, transaction building, and Freighter signing integrations.
-- **UI Components**:
-  - `Header`: Displays wallet status, active network badges, and address copy widgets.
-  - `Dashboard`: Shows native balance stats, inactive warnings, and faucet triggers.
-  - `PaymentForm`: Manages payment inputs, transaction states, and transaction explorer hashes.
-  - `PaymentTracker`: Implements the multi-address payment list, live validations, and operation tracking.
-  - `BalanceChecker`: Watches multiple accounts simultaneously.
-  - `TransactionHistory`: Maps operations to incoming/outgoing feeds.
+```
+VITE_HORIZON_URL=https://horizon-testnet.stellar.org
+VITE_NETWORK_PASSPHRASE=Test SDF Network ; September 2015
+```
+
+Do not commit secrets to the repository.
+
+## Soroban Smart Contract
+
+The Soroban contract is in `contracts/payment_tracker`. To compile and test locally:
+
+```bash
+# add wasm target if needed
+rustup target add wasm32-unknown-unknown
+
+# run tests
+cd contracts/payment_tracker
+cargo test
+
+# build release wasm
+cargo build --target wasm32-unknown-unknown --release
+```
+
+## Project Structure (important files)
+
+- `src/` — React app source
+- `src/components/` — UI components (`PaymentForm`, `PaymentTracker`, `BalanceChecker`, `TransactionHistory`, etc.)
+- `src/services/stellar.ts` — Horizon, transaction building, and Freighter helpers
+- `contracts/payment_tracker/` — Soroban smart contract (Rust)
+
+
+## Contributing
+
+Contributions are welcome. Please open issues or PRs describing the change and include screenshots when relevant.
+
+
+
+If you'd like, I can also add a `docs/` folder with the three placeholder images and a `.gitkeep` file to make committing easier. Want me to add those now?
