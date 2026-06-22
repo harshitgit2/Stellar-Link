@@ -4,7 +4,8 @@ import { Dashboard } from "./components/Dashboard";
 import { PaymentForm } from "./components/PaymentForm";
 import { BalanceChecker } from "./components/BalanceChecker";
 import { TransactionHistory } from "./components/TransactionHistory";
-import { Wallet, ArrowLeftRight, Coins, History, X } from "lucide-react";
+import { PaymentTracker } from "./components/PaymentTracker";
+import { Wallet, ArrowLeftRight, Coins, History, X, Layers } from "lucide-react";
 import { stellarService } from "./services/stellar";
 
 interface Toast {
@@ -165,6 +166,13 @@ function App() {
             <span>Send XLM</span>
           </button>
           <button 
+            className={`tab-btn ${activeTab === "tracker" ? "active" : ""}`}
+            onClick={() => setActiveTab("tracker")}
+          >
+            <Layers size={16} />
+            <span>Payment Tracker</span>
+          </button>
+          <button 
             className={`tab-btn ${activeTab === "checker" ? "active" : ""}`}
             onClick={() => setActiveTab("checker")}
           >
@@ -196,6 +204,16 @@ function App() {
 
         {activeTab === "send" && (
           <PaymentForm
+            senderAddress={address}
+            balance={balance}
+            isFunded={isFunded}
+            onPaymentSuccess={handlePaymentSuccess}
+            showToast={showToast}
+          />
+        )}
+
+        {activeTab === "tracker" && (
+          <PaymentTracker
             senderAddress={address}
             balance={balance}
             isFunded={isFunded}

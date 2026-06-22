@@ -240,4 +240,78 @@ export const stellarService = {
       throw new Error(err?.message || "Transaction failed or was rejected.");
     }
   },
+
+  /**
+   * Send multiple XLM payments in a single transaction (batch operation).
+   * Appends a payment operation for each recipient.
+   */
+  async sendBatchPayment(
+    senderAddress: string,
+    recipients: { address: string; amount: string }[],
+    memo?: string
+  ): Promise<{ hash: string }> {
+    try {
+      // 1. Load sender account to get sequence number
+      const senderAccount = await server.loadAccount(senderAddress);
+
+      // 2. Fetch current base fee
+      let baseFee = 100;
+      try {
+        baseFee = await server.fetchBaseFee();
+      } catch (feeErr) {
+        console.warn("Could not fetch base fee, defaulting to 100 stroops", feeErr);
+      }
+
+      // 3. Build the transaction with multiple operations
+      // Total fee is baseFee * number of operations
+      let builder = new TransactionBuilder(senderAccount, {
+        fee: (baseFee * recipients.length).toString(),
+        networkPassphrase: Networks.TESTNET,
+      });
+
+      for (const rec of recipients) {
+        builder = builder.addOperation(
+          Operation.payment({
+            destination: rec.address,
+            asset: Asset.native(),
+            amount: rec.amount,
+          })
+        );
+      }
+
+      builder = builder.setTimeout(180); // 3 minutes timeout
+
+      // 4. Add memo if provided
+      if (memo && memo.trim() !== "") {
+        builder = builder.addMemo(Memo.text(memo.trim()));
+      }
+
+      const transaction = builder.build();
+      const xdr = transaction.toXDR();
+
+      // 5. Sign the transaction
+      const signRes = await signTransaction(xdr, {
+        networkPassphrase: Networks.TESTNET,
+      });
+
+      if (signRes.error) {
+        throw new Error(signRes.error);
+      }
+
+      if (!signRes.signedTxXdr) {
+        throw new Error("No signed transaction XDR returned from Freighter.");
+      }
+
+      // 6. Submit the signed transaction
+      const signedTransaction = TransactionBuilder.fromXDR(signRes.signedTxXdr, Networks.TESTNET);
+      const submitRes = await server.submitTransaction(signedTransaction);
+
+      return {
+        hash: submitRes.hash,
+      };
+    } catch (err: any) {
+      console.error("Batch transaction failed:", err);
+      throw new Error(err?.message || "Batch transaction failed or was rejected.");
+    }
+  },
 };
