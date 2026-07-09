@@ -36,25 +36,24 @@ export const Header: React.FC<HeaderProps> = ({
   const isTestnet = network.toUpperCase() === "TESTNET";
 
   return (
-    <header className="glass-card flex-row-between animate-fade-in" style={{ padding: "16px 24px", marginBottom: "24px" }}>
+    <header className="glass-card flex-row-between animate-fade-in app-header">
       {/* Brand logo */}
-      <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-        <div 
-          style={{ 
-            background: "linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%)",
-            width: "40px",
-            height: "40px",
-            borderRadius: "10px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            boxShadow: "0 4px 12px rgba(59, 130, 246, 0.3)"
-          }}
-        >
+      <div className="header-brand">
+        <div className="brand-logo-container">
           <Wallet size={20} color="white" />
         </div>
         <div>
-          <h1 style={{ fontSize: "1.2rem", fontWeight: 700, margin: 0, letterSpacing: "-0.01em", display: "flex", alignItems: "center", gap: "8px" }}>
+          <h1 
+            style={{ 
+              fontSize: "1.2rem", 
+              fontWeight: 700, 
+              margin: 0, 
+              letterSpacing: "-0.01em", 
+              display: "flex", 
+              alignItems: "center", 
+              gap: "8px" 
+            }}
+          >
             Stellar Link
             <span style={{ fontSize: "0.75rem", fontWeight: 400, color: "var(--text-muted)" }}>v1.0</span>
           </h1>
@@ -62,13 +61,13 @@ export const Header: React.FC<HeaderProps> = ({
       </div>
 
       {/* Connection & Network Status */}
-      <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+      <div className="header-actions-group">
         {address && (
           <>
             {/* Network Badge */}
             <div 
               className="flex-center"
-              style={{ 
+              style={{
                 background: isTestnet ? "rgba(16, 185, 129, 0.08)" : "rgba(245, 158, 11, 0.08)",
                 border: `1px solid ${isTestnet ? "rgba(16, 185, 129, 0.2)" : "rgba(245, 158, 11, 0.2)"}`,
                 color: isTestnet ? "var(--color-success)" : "var(--color-warning)",
@@ -76,11 +75,12 @@ export const Header: React.FC<HeaderProps> = ({
                 borderRadius: "20px",
                 fontSize: "0.75rem",
                 fontWeight: 600,
-                gap: "6px"
+                gap: "6px",
+                flexShrink: 0
               }}
             >
               {!isTestnet && <ShieldAlert size={14} />}
-              <span className={`status-dot ${isTestnet ? "active" : "inactive"}`} style={{ boxShadow: !isTestnet ? "none" : undefined }} />
+              <span className={`status-dot ${isTestnet ? "active" : "inactive"}`} />
               {isTestnet ? "TESTNET" : `NETWORK: ${network}`}
             </div>
 

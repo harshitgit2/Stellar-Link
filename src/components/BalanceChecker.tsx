@@ -166,7 +166,7 @@ export const BalanceChecker: React.FC = () => {
 
   return (
     <div className="glass-card animate-fade-in">
-      <div className="flex-row-between" style={{ marginBottom: "20px" }}>
+      <div className="checker-header-row">
         <h2 style={{ margin: 0, fontSize: "1.5rem", display: "flex", alignItems: "center", gap: "10px" }}>
           <Coins size={24} color="var(--color-primary)" />
           Wallet Balance Checker
@@ -183,8 +183,8 @@ export const BalanceChecker: React.FC = () => {
       </div>
 
       {/* Add New Account Form */}
-      <form onSubmit={handleAddAccount} style={{ display: "flex", flexWrap: "wrap", gap: "12px", marginBottom: "24px", paddingBottom: "20px", borderBottom: "1px solid var(--border-color)" }}>
-        <div style={{ flex: "2 1 300px" }}>
+      <form onSubmit={handleAddAccount} className="checker-add-form">
+        <div>
           <input 
             type="text" 
             className="form-input"
@@ -194,7 +194,7 @@ export const BalanceChecker: React.FC = () => {
             style={{ padding: "10px 14px" }}
           />
         </div>
-        <div style={{ flex: "1 1 150px" }}>
+        <div>
           <input 
             type="text" 
             className="form-input"
@@ -220,23 +220,17 @@ export const BalanceChecker: React.FC = () => {
           <p>No watched accounts. Add a Stellar public address above to start tracking balances.</p>
         </div>
       ) : (
-        <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+        <div className="checker-accounts-list">
           {accounts.map((acc, index) => (
             <div 
               key={acc.address}
-              className="glass-card interactive"
+              className="checker-account-card glass-card interactive"
               style={{ 
-                padding: "16px 20px", 
-                display: "flex", 
-                flexWrap: "wrap",
-                alignItems: "center", 
-                justifyContent: "space-between",
-                gap: "16px",
                 borderColor: acc.isLoading ? "rgba(59, 130, 246, 0.3)" : undefined
               }}
             >
               {/* Account Label & Address */}
-              <div style={{ display: "flex", flexDirection: "column", gap: "4px", minWidth: "220px", flex: "1" }}>
+              <div className="account-card-info">
                 <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                   <span style={{ fontWeight: 600, fontSize: "0.95rem" }}>{acc.label}</span>
                   <span 
@@ -268,7 +262,7 @@ export const BalanceChecker: React.FC = () => {
               </div>
 
               {/* Balance display */}
-              <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
+              <div className="account-card-balance-actions">
                 <div style={{ textAlign: "right" }}>
                   {acc.isLoading ? (
                     <div className="spinner spinner-sm" style={{ margin: "4px auto" }} />

@@ -1,132 +1,76 @@
-# Stellar Link | Testnet Wallet dApp & Soroban Smart Contract
+# Stellar Link | Testnet Wallet dApp
 
-Stellar Link is a premium, dark-mode decentralized wallet client and smart contract system for the Stellar Testnet. Connecting directly with the browser-injected **Freighter wallet extension**, it enables users to track native balances, request testnet faucet funds, execute atomic multi-address payments, and visualize the entire ledger path of their assets.
+Stellar Link is a premium, dark-mode-first decentralized wallet client for the Stellar Testnet. It connects with the Freighter browser wallet extension to check balances, request faucet funding, execute payments, and monitor watchlists.
 
-<p align="center">
-  <img src="./public/wallet.png" width="800" alt="Stellar Link Dashboard Mockup" />
-</p>
+## Features
 
----
-
-## 🌟 Key Features
-
-- **Wallet Connection**: Securely authenticate and interact using the **Freighter Wallet Extension** configured for Stellar Testnet.
-- **Dashboard Overview**: Access real-time balances, view account activation state, and fund new accounts instantly with 10,000 testnet XLM from the **Friendbot Faucet**.
-- **Payment Tracker (Multi-Address Transfers)**: Bundle payments to multiple public keys concurrently into a single Stellar atomic transaction. Save transaction fees and execute batch transfers with a single Freighter signature.
-- **Visual Fund Path Tracker**: A custom, interactive SVG flowchart that traces transaction histories:
-  - **Incoming Sources**: Displays where the wallet's funds originated (e.g. Faucet or other active public keys) by querying Horizon payment logs.
-  - **Your Wallet**: Features a central node presenting your wallet's address and active balance.
-  - **Recipient Flow**: Connects recipients with glowing, animated lines that speed up during transaction execution.
-  - **Ledger Tooltips**: Hover over nodes to inspect full public keys, XLM amounts, and ledger transaction hashes.
-- **Balance Checker**: Monitor multiple custom watchlists concurrently, persisted in browser `localStorage`.
-- **Transaction History**: View a timeline of the 15 most recent payment-related operations with directional indicators and explorer logs.
+- **Wallet Connection**: Securely connect and disconnect using the browser-injected **Freighter wallet extension**.
+- **Dashboard Overview**: Check account status (active/inactive) and see your native Stellar Lumens (XLM) balance with real-time updates.
+- **Testnet Faucet**: Request 10,000 testnet XLM from Friendbot with a single click.
+- **Simple Payment dApp**: Send XLM to any Stellar address on the testnet. Includes live validations (recipient format, sufficient balances, and text memo byte-limits) and interactive step-by-step transaction state visualization (building -> signing -> submitting -> success/error).
+- **Balance Checker**: Track and monitor balances for multiple custom Stellar accounts concurrently. Watched addresses are persisted in browser `localStorage`.
+- **Transaction History**: Display a timeline of the 15 most recent payment-related operations (payments sent, payments received, account creations, and account merges) complete with directional indicators and direct explorer links.
+- **Mobile Responsive Layout**: Refactored styling that scales dynamically. Features horizontal tab scrolls on mobile, stacking header actions, and wrapping timeline cards.
+- **CI/CD Integration**: Pre-configured build automation tests on push/PR.
 
 ---
 
-## 📸 Component Showcase (Resized Screenshots)
+## Technical Stack
 
-### 1. Multi-Address Transfer Setup
-Set up batch payments to multiple destinations with live address format regex validation and total cost estimations:
-<p align="center">
-  <img src="./public/pay-track.png" width="800" alt="Multi-Address Transfer Setup Form" />
-</p>
-
-### 2. Interactive SVG Funds Path Tracker
-Track the entire path of assets from origin sources into your wallet, and out to multiple destination nodes with CSS path flow animations:
-<p align="center">
-  <img src="./public/pay-track-map.png" width="800" alt="SVG Funds Path Flow Chart" />
-</p>
-
-### 3. Multi-Account Balance Checker Watchlist
-Track balances across several accounts simultaneously with live status indicators:
-<p align="center">
-  <img src="./public/wallet-balance.png" width="800" alt="Watchlist Balance Checker" />
-</p>
+- **Core Framework**: React (TypeScript) + Vite
+- **Blockchain SDK**: `@stellar/stellar-sdk` (utilizing the Horizon REST API client)
+- **Wallet Integration**: `@stellar/freighter-api`
+- **Iconography**: `lucide-react`
+- **Styling**: Modern, responsive vanilla CSS featuring glassmorphic designs, micro-animations, custom scrollbars, and toast status banners.
+- **Polyfills**: `vite-plugin-node-polyfills` (handles cryptography buffer requirements of the Stellar SDK).
+- **CI/CD**: GitHub Actions (build testing across Node.js versions 18.x, 20.x, and 22.x).
 
 ---
 
-## 🛠️ Soroban Smart Contract
+## Prerequisites
 
-Stellar Link incorporates a custom **Soroban smart contract** located under the [`contracts/payment_tracker`](./contracts/payment_tracker) directory. This contract records payment events directly on-chain for verifiability and decentralized history indexing.
+To interact with the Stellar blockchain, you must have the **Freighter Wallet Extension** installed in your browser.
 
-### Contract Features
-- **Payment Logging**: Stores payment items detailing sender, recipient, amount, memo, and block timestamp.
-- **Persistent History Pruning**: Automatically prunes historical entries, retaining the 20 most recent records to prevent state bloat.
-- **On-Chain Events**: Publishes structured `payment` events to support off-chain indexer synchronization (e.g. Mercury, Horizon event streams).
-- **Authentication**: Enforces sender signatures using `sender.require_auth()`.
-
-### Deployed Contract Details (Testnet)
-- **Contract ID**: `CDUX6WNHB7TFLC2PJV5O3WTYWYZT4Q7TRACKCCAB45GTYPX6X37JLW4RYX2B`
-- **Horizon Explorer Link**: [View Contract on Stellar Expert](https://stellar.expert/explorer/testnet/contract/CDUX6WNHB7TFLC2PJV5O3WTYWYZT4Q7TRACKCCAB45GTYPX6X37JLW4RYX2B)
-
-### Building & Testing the Contract
-
-To run tests and compile the contract:
-1. Ensure Rust and Cargo are configured with the WASM target:
-   ```bash
-   rustup target add wasm32-unknown-unknown
-   ```
-2. Navigate to the contract folder and execute tests:
-   ```bash
-   cd contracts/payment_tracker
-   cargo test
-   ```
-3. Compile the production WASM smart contract binary:
-   ```bash
-   cargo build --target wasm32-unknown-unknown --release
-   ```
+1. Install Freighter from the official website: [freighter.app](https://www.freighter.app/)
+2. Open the extension and configure it to use the **Testnet**:
+   - Go to *Settings (gear icon)* > *Networks*
+   - Select **Testnet** (Default is usually Public/Mainnet)
 
 ---
 
-## 🚀 Quick Start (Frontend dApp)
+## Getting Started
 
-### 1. Prerequisites
-- **Node.js**: Version 16 or higher.
-- **Freighter Browser Extension**: Set network to **Testnet** (*Settings (gear icon)* > *Networks* > *Testnet*).
-
-### 2. Install & Run Frontend
-Clone the repository, navigate to the folder, and run:
+### 1. Clone & Install Dependencies
+Navigate to the project directory and run:
 ```bash
-# Install dependencies
 npm install
+```
 
-# Start local Vite development server
+### 2. Run the Development Server
+Start the local Vite server:
+```bash
 npm run dev
 ```
 Open **[http://localhost:5173](http://localhost:5173)** in your browser.
 
-### 3. Production Build
-To build the static assets for production:
+### 3. Build for Production
+Bundle the application for production:
 ```bash
 npm run build
 ```
-Vite outputs the built assets inside the `dist/` directory.
+Vite will output the static bundle assets under the `dist/` directory.
 
 ---
 
-## 📂 Project Structure
+## Code Structure
 
-```
-├── Cargo.toml                      # Root workspace configuration
-├── contracts/
-│   └── payment_tracker/            # Soroban Smart Contract
-│       ├── Cargo.toml              # Contract package configuration
-│       └── src/
-│           ├── lib.rs              # Contract entry point and logic
-│           └── test.rs             # Contract unit tests
-├── public/                         # Public assets (icons, screenshots)
-├── src/                            # Frontend source code
-│   ├── components/                 # React UI Components
-│   │   ├── BalanceChecker.tsx      # Watches balance watchlists
-│   │   ├── Dashboard.tsx           # Balance overview and faucet request
-│   │   ├── Header.tsx              # Connect controls and network badges
-│   │   ├── PaymentForm.tsx         # Single transfer form
-│   │   ├── PaymentTracker.tsx      # Batch payments & interactive SVG chart
-│   │   └── TransactionHistory.tsx  # Timeline of recent operations
-│   ├── services/
-│   │   └── stellar.ts              # Horizon API client & Freighter integrations
-│   ├── App.tsx                     # Main layout & tab routing
-│   ├── index.css                   # Global responsive dark-mode styling
-│   └── main.tsx                    # React mounting entry point
-└── vite.config.ts                  # Vite config injecting Node polyfills
-```
+- **Vite Config**: [`vite.config.ts`](./vite.config.ts) contains configuration for injecting Node polyfills.
+- **CI/CD Configuration**: [`.github/workflows/ci.yml`](./.github/workflows/ci.yml) defines build verification pipeline settings.
+- **CSS Styles**: [`src/index.css`](./src/index.css) defines the theme colors, media queries, mobile layouts, cards, and transitions.
+- **Stellar Service**: [`src/services/stellar.ts`](./src/services/stellar.ts) handles Horizon calls, transaction building, and Freighter signing integrations.
+- **UI Components**:
+  - `Header`: Displays wallet status, active network badges, and address copy widgets.
+  - `Dashboard`: Shows native balance stats, inactive warnings, and faucet triggers.
+  - `PaymentForm`: Manages payment inputs, transaction states, and transaction explorer hashes.
+  - `BalanceChecker`: Watches multiple accounts simultaneously.
+  - `TransactionHistory`: Maps operations to incoming/outgoing feeds.

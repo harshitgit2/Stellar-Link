@@ -20,20 +20,8 @@ export const Dashboard: React.FC<DashboardProps> = ({
 }) => {
   if (!address) {
     return (
-      <div className="glass-card flex-center animate-fade-in" style={{ padding: "48px 24px", flexDirection: "column", gap: "20px", textAlign: "center" }}>
-        <div 
-          style={{ 
-            background: "rgba(59, 130, 246, 0.05)",
-            border: "1px dashed rgba(59, 130, 246, 0.3)",
-            width: "80px",
-            height: "80px",
-            borderRadius: "50%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            marginBottom: "10px"
-          }}
-        >
+      <div className="glass-card flex-center dashboard-empty-state animate-fade-in">
+        <div className="dashboard-empty-logo">
           <Wallet size={36} color="var(--color-primary)" />
         </div>
         <div>
@@ -63,45 +51,27 @@ export const Dashboard: React.FC<DashboardProps> = ({
       {/* Balance & Overview Column */}
       <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
         {/* Main Balance Card */}
-        <div 
-          className="glass-card" 
-          style={{ 
-            position: "relative", 
-            overflow: "hidden", 
-            background: "linear-gradient(135deg, rgba(16, 22, 43, 0.9) 0%, rgba(20, 30, 60, 0.7) 100%)",
-            border: "1px solid rgba(255, 255, 255, 0.1)"
-          }}
-        >
-          <div 
-            style={{ 
-              position: "absolute",
-              top: "-50px",
-              right: "-50px",
-              width: "200px",
-              height: "200px",
-              background: "radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%)",
-              pointerEvents: "none"
-            }}
-          />
+        <div className="glass-card dashboard-balance-card">
+          <div className="dashboard-balance-glow" />
 
           <p style={{ textTransform: "uppercase", fontSize: "0.8rem", letterSpacing: "0.1em", fontWeight: 600, color: "var(--text-secondary)" }}>
             Available Balance
           </p>
           
-          <div style={{ display: "flex", alignItems: "baseline", gap: "10px", margin: "16px 0 8px" }}>
-            <h1 style={{ fontSize: "3rem", fontWeight: 700, margin: 0, lineHeight: 1, letterSpacing: "-0.03em" }}>
+          <div className="balance-value-row">
+            <h1 className="balance-value">
               {parseFloat(balance).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 7 })}
             </h1>
-            <span style={{ fontSize: "1.5rem", fontWeight: 600, color: "var(--color-secondary)" }}>XLM</span>
+            <span className="balance-currency">XLM</span>
           </div>
 
-          <p style={{ fontSize: "0.85rem", color: "var(--text-muted)", display: "flex", alignItems: "center", gap: "6px" }}>
+          <p className="balance-detail-text">
             <Coins size={14} />
             Stellar Native Lumens (Testnet)
           </p>
 
           {/* Quick Action Navigation Buttons */}
-          <div style={{ display: "flex", gap: "12px", marginTop: "24px", borderTop: "1px solid var(--border-color)", paddingTop: "20px" }}>
+          <div className="dashboard-actions-row">
             <button 
               className="btn-primary" 
               onClick={() => setActiveTab("send")}
@@ -122,7 +92,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
 
         {/* Unfunded Warning Card */}
         {!isFunded && (
-          <div className="alert-banner warning animate-fade-in" style={{ margin: 0 }}>
+          <div className="alert-banner warning animate-fade-in alert-funding">
             <Info size={24} style={{ flexShrink: 0 }} />
             <div className="alert-banner-content">
               <div className="alert-banner-title">Account Inactive (Unfunded)</div>
@@ -130,17 +100,9 @@ export const Dashboard: React.FC<DashboardProps> = ({
                 This account is brand new and has not been initialized on the Stellar Testnet. In Stellar, accounts must hold a minimum reserve (at least 1 XLM) to exist. Use the faucet below to fund and initialize your account.
               </div>
               <button 
-                className="btn-primary" 
+                className="btn-primary warning-badge-btn" 
                 onClick={onRequestFaucet} 
                 disabled={faucetLoading}
-                style={{ 
-                  background: "var(--color-warning)",
-                  boxShadow: "0 4px 14px rgba(245, 158, 11, 0.3)",
-                  padding: "8px 16px",
-                  fontSize: "0.85rem",
-                  color: "#070a13",
-                  fontWeight: 600
-                }}
               >
                 {faucetLoading ? (
                   <>
@@ -162,7 +124,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
       {/* Faucet Sidebar Column */}
       <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
         {/* Faucet Interactive Card */}
-        <div className="glass-card" style={{ display: "flex", flexDirection: "column", height: "100%", justifyContent: "space-between" }}>
+        <div className="glass-card faucet-card">
           <div>
             <h3 style={{ fontSize: "1.2rem", marginBottom: "8px", display: "flex", alignItems: "center", gap: "8px" }}>
               <Flame size={20} color="var(--color-warning)" />
@@ -173,7 +135,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
             </p>
           </div>
 
-          <div style={{ marginTop: "auto" }}>
+          <div className="faucet-card-body">
             <button 
               className="btn-primary" 
               onClick={onRequestFaucet} 

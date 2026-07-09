@@ -141,7 +141,7 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
 
   if (!senderAddress) {
     return (
-      <div className="glass-card flex-center animate-fade-in" style={{ padding: "40px", flexDirection: "column", gap: "16px" }}>
+      <div className="glass-card flex-center animate-fade-in" style={{ padding: "40px", flexDirection: "column", gap: "16px", textAlign: "center" }}>
         <Info size={36} color="var(--color-primary)" />
         <h2>Connect Wallet to Send XLM</h2>
         <p>You need to connect your Freighter wallet to execute transfers on the Stellar Testnet.</p>
@@ -150,7 +150,7 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
   }
 
   return (
-    <div className="glass-card animate-fade-in" style={{ maxWidth: "600px", margin: "0 auto" }}>
+    <div className="glass-card payment-card animate-fade-in">
       <h2 style={{ display: "flex", alignItems: "center", gap: "10px", fontSize: "1.5rem" }}>
         <ArrowLeftRight size={24} color="var(--color-primary)" />
         Send XLM Payment
@@ -173,7 +173,7 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
 
           {/* Amount */}
           <div className="form-group">
-            <div className="flex-row-between" style={{ marginBottom: "8px" }}>
+            <div className="amount-input-header">
               <label className="form-label" style={{ margin: 0 }}>Amount (XLM)</label>
               <span 
                 style={{ fontSize: "0.75rem", color: "var(--text-secondary)", cursor: "pointer", textDecoration: "underline" }}
@@ -229,7 +229,7 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
 
       {/* Transaction Progress States */}
       {txState !== "idle" && (
-        <div className="flex-center animate-fade-in" style={{ flexDirection: "column", padding: "32px 16px", textAlign: "center", gap: "24px" }}>
+        <div className="flex-center payment-status-container animate-fade-in">
           
           {/* Loaders and Status Icons */}
           {["building", "signing", "submitting"].includes(txState) && (
@@ -261,26 +261,14 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
                 </p>
                 
                 {/* Transaction details card */}
-                <div 
-                  style={{ 
-                    background: "rgba(255,255,255,0.03)", 
-                    border: "1px solid var(--border-color)", 
-                    borderRadius: "10px", 
-                    padding: "16px",
-                    fontFamily: "var(--font-mono)",
-                    fontSize: "0.75rem",
-                    textAlign: "left",
-                    wordBreak: "break-all",
-                    marginBottom: "20px"
-                  }}
-                >
+                <div className="tx-hash-box">
                   <div style={{ color: "var(--text-secondary)", marginBottom: "4px", textTransform: "uppercase", fontSize: "0.65rem", fontWeight: 600 }}>
                     Transaction Hash
                   </div>
                   <div style={{ color: "var(--text-primary)" }}>{txHash}</div>
                 </div>
 
-                <div style={{ display: "flex", gap: "12px", justifyContent: "center" }}>
+                <div style={{ display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap" }}>
                   <a 
                     href={`https://stellar.expert/explorer/testnet/tx/${txHash}`} 
                     target="_blank" 

@@ -51,7 +51,7 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({ address,
 
   if (!address) {
     return (
-      <div className="glass-card flex-center animate-fade-in" style={{ padding: "40px", flexDirection: "column", gap: "16px" }}>
+      <div className="glass-card flex-center animate-fade-in" style={{ padding: "40px", flexDirection: "column", gap: "16px", textAlign: "center" }}>
         <Info size={36} color="var(--color-primary)" />
         <h2>Connect Wallet to View History</h2>
         <p>You need to connect your Freighter wallet to view your transaction log.</p>
@@ -61,7 +61,7 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({ address,
 
   return (
     <div className="glass-card animate-fade-in">
-      <div className="flex-row-between" style={{ marginBottom: "20px" }}>
+      <div className="history-header-row">
         <h2 style={{ margin: 0, fontSize: "1.5rem", display: "flex", alignItems: "center", gap: "10px" }}>
           Recent Transactions
         </h2>
@@ -104,7 +104,7 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({ address,
       )}
 
       {!loading && !error && payments.length > 0 && (
-        <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+        <div className="history-records-list">
           {payments.map((tx) => {
             const isOutgoing = tx.from === address;
             const isCreatedAccount = tx.type === "create_account";
@@ -136,20 +136,9 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({ address,
             }
 
             return (
-              <div 
-                key={tx.id}
-                className="glass-card interactive"
-                style={{ 
-                  padding: "16px 20px", 
-                  display: "flex", 
-                  flexWrap: "wrap",
-                  alignItems: "center", 
-                  justifyContent: "space-between",
-                  gap: "16px"
-                }}
-              >
+              <div key={tx.id} className="history-record-card glass-card interactive">
                 {/* Transaction Icon and details */}
-                <div style={{ display: "flex", alignItems: "center", gap: "16px", flex: "1 1 250px" }}>
+                <div className="record-card-icon-info">
                   <div 
                     style={{ 
                       width: "40px", 
@@ -201,7 +190,7 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({ address,
                 </div>
 
                 {/* Amount, Timestamp and Link Column */}
-                <div style={{ display: "flex", alignItems: "center", gap: "24px", justifyContent: "space-between", flex: "1 1 200px" }}>
+                <div className="record-card-balance-time">
                   <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
                     <div style={{ fontSize: "1.05rem", fontWeight: 700, color: amountColor, textAlign: "right" }}>
                       {amountDisplay}

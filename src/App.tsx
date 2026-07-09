@@ -4,8 +4,7 @@ import { Dashboard } from "./components/Dashboard";
 import { PaymentForm } from "./components/PaymentForm";
 import { BalanceChecker } from "./components/BalanceChecker";
 import { TransactionHistory } from "./components/TransactionHistory";
-import { PaymentTracker } from "./components/PaymentTracker";
-import { Wallet, ArrowLeftRight, Coins, History, X, Layers } from "lucide-react";
+import { Wallet, ArrowLeftRight, Coins, History, X } from "lucide-react";
 import { stellarService } from "./services/stellar";
 
 interface Toast {
@@ -166,13 +165,6 @@ function App() {
             <span>Send XLM</span>
           </button>
           <button 
-            className={`tab-btn ${activeTab === "tracker" ? "active" : ""}`}
-            onClick={() => setActiveTab("tracker")}
-          >
-            <Layers size={16} />
-            <span>Payment Tracker</span>
-          </button>
-          <button 
             className={`tab-btn ${activeTab === "checker" ? "active" : ""}`}
             onClick={() => setActiveTab("checker")}
           >
@@ -212,16 +204,6 @@ function App() {
           />
         )}
 
-        {activeTab === "tracker" && (
-          <PaymentTracker
-            senderAddress={address}
-            balance={balance}
-            isFunded={isFunded}
-            onPaymentSuccess={handlePaymentSuccess}
-            showToast={showToast}
-          />
-        )}
-
         {activeTab === "checker" && <BalanceChecker />}
 
         {activeTab === "history" && (
@@ -233,7 +215,7 @@ function App() {
       </main>
 
       {/* Footer Info */}
-      <footer style={{ marginTop: "48px", borderTop: "1px solid var(--border-color)", paddingTop: "16px", textAlign: "center", fontSize: "0.8rem", color: "var(--text-muted)" }}>
+      <footer className="app-footer">
         <p>Stellar Link is a testnet payment demonstration. Never send mainnet assets here.</p>
         <p style={{ marginTop: "4px" }}>Powered by Freighter Wallet & Stellar Horizon API</p>
       </footer>
